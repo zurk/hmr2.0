@@ -64,5 +64,6 @@ if __name__ == '__main__':
     joints = ((joints + 1) * 0.5) * params['img_size']
 
     renderer = TrimeshRenderer()
+    plot.figure(figsize=(16, 9))
     visualize(renderer, original_img, params, vertices, cam, joints)
-    plot.savefig(args.output)
+    plot.savefig(args.output, dpi=200, quality=100, pad_inches=0)
