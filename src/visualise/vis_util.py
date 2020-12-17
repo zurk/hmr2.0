@@ -194,8 +194,6 @@ def visualize(renderer, img, params, verts, cam, joints):
     put_image_on_axis(img_mesh_rot1, 4, 'rotated 60 degree')
     put_image_on_axis(img_mesh_rot2, 5, 'rotated -60 degree')
 
-    plot.show()
-
 
 def draw_2d_on_image(input_image, joints, draw_edges=True, vis=None):
     image = input_image.copy()

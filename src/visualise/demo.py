@@ -1,8 +1,10 @@
 import argparse
 import os
+from pathlib import Path
 import sys
 
 import numpy as np
+import matplotlib.pyplot as plot
 
 # to make run from console for module import
 sys.path.append(os.path.abspath('..'))
@@ -28,6 +30,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Demo HMR2.0')
 
     parser.add_argument('--image', required=False, default='coco1.png')
+    parser.add_argument('--output', required=False, default='output.png')
     parser.add_argument('--model', required=False, default='base_model', help="model from logs folder")
     parser.add_argument('--setting', required=False, default='paired(joints)', help="setting of the model")
     parser.add_argument('--joint_type', required=False, default='cocoplus', help="<cocoplus|custom>")
@@ -42,7 +45,7 @@ if __name__ == '__main__':
     class DemoConfig(Config):
         BATCH_SIZE = 1
         ENCODER_ONLY = True
-        LOG_DIR = os.path.abspath('../../logs/{}/{}'.format(args.setting, args.model))
+        LOG_DIR = str(Path(__file__).absolute().parents[2] / 'logs' / args.setting / args.model)
         INITIALIZE_CUSTOM_REGRESSOR = args.init_toes
         JOINT_TYPE = args.joint_type
 
@@ -51,7 +54,7 @@ if __name__ == '__main__':
 
     # initialize model
     model = Model()
-    original_img, input_img, params = preprocess_image('images/{}'.format(args.image), config.ENCODER_INPUT_SHAPE[0])
+    original_img, input_img, params = preprocess_image(args.image, config.ENCODER_INPUT_SHAPE[0])
 
     result = model.detect(input_img)
 
@@ -62,3 +65,4 @@ if __name__ == '__main__':
 
     renderer = TrimeshRenderer()
     visualize(renderer, original_img, params, vertices, cam, joints)
+    plot.savefig(args.output)
